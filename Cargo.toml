@@ -1,0 +1,20 @@
+[package]
+name = "hy_extension"
+version = "0.1.0"
+edition = "2021"
+authors = ["Adarsh Melethil <adarshmelethil@gmail.com>"]
+description = "Hylang rust extension"
+readme = "README.md"
+repository = "https://github.com/adarshmelethil/hy"
+keywords = ["lisp"]
+
+# [package.metadata.maturin]
+# name = "ballista._internal"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+crate-type = ["cdylib"]
+path = "src.rs/lib.rs"
+
+[dependencies]
+pyo3 = "0.18.1"

@@ -1,0 +1,98 @@
+###############################################################################
+#                                     Meta                                    #
+###############################################################################
+[project]
+name = "hy"
+version = "0.26.0"
+author = "Paul Tagliamonte"
+author-email = "tag@pault.ag"
+requires-python = ">= 3.11, < 3.12"
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: DFSG approved",
+  "License :: OSI Approved :: MIT License",  # Really "Expat". Ugh.
+  "Operating System :: OS Independent",
+  "Programming Language :: Lisp",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Environment :: WebAssembly :: Emscripten",
+  "Topic :: Software Development :: Code Generators",
+  "Topic :: Software Development :: Compilers",
+  "Topic :: Software Development :: Libraries",
+]
+
+dependencies = [
+  "funcy",  # functional
+  "miniKanren",  # logic
+  "more-itertools",
+  # parsers
+  "tree_sitter",
+  "funcparserlib",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest",
+  "maturin",
+]
+
+[project.gui-scripts]
+
+[project.scripts]
+hy = "hy.cmdline:hy_main,"
+hyc = "hy.cmdline:hyc_main,"
+hy2py = "hy.cmdline:hy2py_main"
+
+###############################################################################
+#                                    Build                                    #
+###############################################################################
+[build-system]
+requires = ["maturin>=0.13,<2"]
+build-backend = "maturin"
+
+[tool.maturin]
+# Cargo Options
+# Build artifacts with the specified Cargo profile
+profile = "release"
+features = ["pyo3/extension-module"]
+manifest-path = "Cargo.toml"
+# Extra arguments that will be passed to rustc as `cargo rustc [...] -- [...] [arg1] [arg2]`
+rustc-args = []
+module-name = "hy._hy"
+
+# Maturin Options
+# Python source directory
+python-source = "src.py"
+# Python packages to include
+python-packages = ["hy"]
+
+# Include additional files
+include = ["src.hy/*"]
+# Bindings type
+bindings = "pyo3"
+
+
+
+###############################################################################
+#                                 Development                                 #
+###############################################################################
+
+[tool.ruff]
+line-length = 120
+
+[tool.pytest.ini_options]
+# Be sure to include Hy test functions with mangled names.
+python_functions = ["test_*", "is_test_*", "hyx_test_*", "hyx_is_test_*"]
+filterwarnings = [
+    "once::DeprecationWarning",
+    "once::PendingDeprecationWarning",
+    "ignore::SyntaxWarning",
+    "ignore::pytest.PytestReturnNotNoneWarning"
+]
